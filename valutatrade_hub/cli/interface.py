@@ -1,6 +1,5 @@
 from valutatrade_hub.core import usecases
 
-
 SESSION = {'user': None}
 
 

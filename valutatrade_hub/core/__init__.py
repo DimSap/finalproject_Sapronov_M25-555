@@ -1,2 +1,2 @@
-from .models import User, Wallet, Portfolio
+from .models import Portfolio, User, Wallet
 

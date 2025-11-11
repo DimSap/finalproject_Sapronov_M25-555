@@ -1,4 +1,4 @@
-from .models import User, Wallet, Portfolio
+from .models import Portfolio, User, Wallet
 from .utils import (
     current_time_iso,
     find_portfolio,
