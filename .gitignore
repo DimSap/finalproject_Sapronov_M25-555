@@ -1,0 +1,7 @@
+.venv/
+.vscode/
+__pycache__/
+dist/
+.ruff_cache/
+db_meta.json
+*.cast
