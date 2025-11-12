@@ -2,9 +2,16 @@ import argparse
 import shlex
 
 from valutatrade_hub.cli.interface import COMMAND_HANDLERS
+from valutatrade_hub.constants import (
+    PROMPT_EOF_MESSAGE,
+    PROMPT_GOODBYE_MESSAGE,
+    PROMPT_START_MESSAGE,
+    SHLEX_ERROR_TEMPLATE,
+)
 
 
 def build_parser():
+    """Prepare argument parser with all CLI commands."""
     parser = argparse.ArgumentParser(prog='valutatrade')
     subparsers = parser.add_subparsers(dest='command')
 
@@ -35,6 +42,7 @@ def build_parser():
 
 
 def execute_command(parser, args):
+    """Resolve and execute command handler."""
     if not getattr(args, 'command', None):
         parser.print_help()
         return
@@ -51,6 +59,7 @@ def execute_command(parser, args):
 
 
 def main(argv=None):
+    """Run CLI in single-shot or interactive mode."""
     parser = build_parser()
     if argv:
         try:
@@ -60,19 +69,19 @@ def main(argv=None):
         execute_command(parser, args)
         return
 
-    print("Введите команду (help для списка, exit для выхода)")
+    print(PROMPT_START_MESSAGE)
     while True:
         try:
             raw = input('> ').strip()
         except (EOFError, KeyboardInterrupt):
-            print('\nВыход.')
+            print(PROMPT_EOF_MESSAGE)
             break
 
         if not raw:
             continue
         lower = raw.lower()
         if lower in ('exit', 'quit'):
-            print('До встречи!')
+            print(PROMPT_GOODBYE_MESSAGE)
             break
         if lower in ('help', '?'):
             parser.print_help()
@@ -81,7 +90,7 @@ def main(argv=None):
         try:
             parts = shlex.split(raw)
         except ValueError as error:
-            print(f'Ошибка ввода: {error}')
+            print(SHLEX_ERROR_TEMPLATE.format(error=error))
             continue
 
         try:

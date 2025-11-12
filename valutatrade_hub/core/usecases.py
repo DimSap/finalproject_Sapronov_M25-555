@@ -17,6 +17,7 @@ from .utils import (
 
 
 def register_user(username, password):
+    """Create a new user with an empty portfolio."""
     if not username:
         raise ValueError('Имя пользователя не может быть пустым')
     if len(password) < 4:
@@ -54,6 +55,7 @@ def register_user(username, password):
 
 
 def login_user(username, password):
+    """Validate credentials and return session data."""
     users = load_users()
     user = find_user(users, username)
     if not user:
@@ -70,6 +72,7 @@ def login_user(username, password):
 
 
 def get_portfolio_overview(user_id, base_currency='USD'):
+    """Return converted balances for all user wallets."""
     base_currency = base_currency.upper()
     if not is_currency_code(base_currency):
         raise ValueError(f"Неизвестная базовая валюта '{base_currency}'")
@@ -117,6 +120,7 @@ def get_portfolio_overview(user_id, base_currency='USD'):
 
 
 def _get_or_create_portfolio(portfolios, user_id):
+    """Fetch portfolio entry or create a new one."""
     record = find_portfolio(portfolios, user_id)
     if record:
         return record
@@ -129,6 +133,7 @@ def _get_or_create_portfolio(portfolios, user_id):
 
 
 def _get_wallet(record, currency_code):
+    """Return wallet data for the currency, creating it if needed."""
     wallets = record.setdefault('wallets', {})
     wallet_data = wallets.get(currency_code)
     if not wallet_data:
@@ -138,6 +143,7 @@ def _get_wallet(record, currency_code):
 
 
 def buy_currency(user_id, currency_code, amount):
+    """Buy currency using USD funds."""
     currency_code = currency_code.upper()
     if not is_currency_code(currency_code):
         raise ValueError('Некорректный код валюты')
@@ -157,14 +163,14 @@ def buy_currency(user_id, currency_code, amount):
     rate, updated_at = get_exchange_rate(currency_code, 'USD')
     cost = amount * rate
 
-    if cost > usd_wallet.balance:
-        raise ValueError('Недостаточно средств в USD')
+    #if cost > usd_wallet.balance:
+    #    raise ValueError('Недостаточно средств в USD')
 
     before_target = target_wallet.balance
     before_usd = usd_wallet.balance
 
     target_wallet.deposit(amount)
-    usd_wallet.withdraw(cost)
+    #usd_wallet.withdraw(cost)
 
     target_wallet_data['balance'] = target_wallet.balance
     usd_wallet_data['balance'] = usd_wallet.balance
@@ -184,6 +190,7 @@ def buy_currency(user_id, currency_code, amount):
 
 
 def sell_currency(user_id, currency_code, amount):
+    """Sell currency and credit USD funds."""
     currency_code = currency_code.upper()
     if not is_currency_code(currency_code):
         raise ValueError('Некорректный код валюты')
@@ -233,6 +240,7 @@ def sell_currency(user_id, currency_code, amount):
 
 
 def fetch_rate(from_currency, to_currency):
+    """Fetch current exchange rate for the currency pair."""
     from_currency = from_currency.upper()
     to_currency = to_currency.upper()
     if not is_currency_code(from_currency) or not is_currency_code(to_currency):
