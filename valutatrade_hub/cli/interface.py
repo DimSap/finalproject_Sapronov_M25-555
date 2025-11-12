@@ -75,9 +75,9 @@ def handle_buy(args):
         f"- {currency}: было {format_balance(result['wallet_before'], currency)} → "
         f"стало {format_balance(result['wallet_after'], currency)}"
     )
-    print(
-        f"- USD: было {format_money(result['usd_before'])} → стало {format_money(result['usd_after'])}"
-    )
+    #print(
+    #    f"- USD: было {format_money(result['usd_before'])} → стало {format_money(result['usd_after'])}"
+    #)
     print(f"Оценочная стоимость покупки: {format_money(result['cost'])} USD")
 
 
@@ -95,10 +95,11 @@ def handle_sell(args):
         f"- {currency}: было {format_balance(result['wallet_before'], currency)} → "
         f"стало {format_balance(result['wallet_after'], currency)}"
     )
-    print(
-        f"- USD: было {format_money(result['usd_before'])} → стало {format_money(result['usd_after'])}"
-    )
-    print(f"Оценочная выручка: {format_money(result['revenue'])} USD")
+    if currency != 'USD':
+        print(
+            f"- USD: было {format_money(result['usd_before'])} → стало {format_money(result['usd_after'])}"
+        )
+        print(f"Оценочная выручка: {format_money(result['revenue'])} USD")
 
 
 def handle_get_rate(args):

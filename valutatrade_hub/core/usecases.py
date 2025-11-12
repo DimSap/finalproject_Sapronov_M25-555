@@ -190,7 +190,7 @@ def buy_currency(user_id, currency_code, amount):
 
 
 def sell_currency(user_id, currency_code, amount):
-    """Sell currency and credit USD funds."""
+    """Sell currency and credit USD funds (USD sales only withdraw)."""
     currency_code = currency_code.upper()
     if not is_currency_code(currency_code):
         raise ValueError('Некорректный код валюты')
@@ -213,6 +213,7 @@ def sell_currency(user_id, currency_code, amount):
     if amount > target_wallet.balance:
         raise ValueError(f"Недостаточно средств: доступно {target_wallet.balance:.4f} {currency_code}, требуется {amount:.4f} {currency_code}")
 
+    same_currency_as_usd = currency_code == 'USD'
     rate, updated_at = get_exchange_rate(currency_code, 'USD')
     revenue = amount * rate
 
@@ -220,10 +221,17 @@ def sell_currency(user_id, currency_code, amount):
     before_usd = usd_wallet.balance
 
     target_wallet.withdraw(amount)
-    usd_wallet.deposit(revenue)
+    # Selling USD is a special case: funds stay in the same wallet, so we do not re-credit them.
+    if not same_currency_as_usd:
+        usd_wallet.deposit(revenue)
 
     target_wallet_data['balance'] = target_wallet.balance
-    usd_wallet_data['balance'] = usd_wallet.balance
+    if same_currency_as_usd:
+        usd_wallet_data['balance'] = target_wallet.balance
+        usd_after = target_wallet.balance
+    else:
+        usd_wallet_data['balance'] = usd_wallet.balance
+        usd_after = usd_wallet.balance
     save_portfolios(portfolios)
 
     return {
@@ -234,7 +242,7 @@ def sell_currency(user_id, currency_code, amount):
         'wallet_before': before_target,
         'wallet_after': target_wallet.balance,
         'usd_before': before_usd,
-        'usd_after': usd_wallet.balance,
+        'usd_after': usd_after,
         'updated_at': updated_at,
     }
 
