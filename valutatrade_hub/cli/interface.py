@@ -1,52 +1,11 @@
-from functools import wraps
-
 from valutatrade_hub.core import usecases
-from valutatrade_hub.core.currencies import list_supported_codes
-from valutatrade_hub.core.exceptions import (
-    ApiRequestError,
-    CurrencyNotFoundError,
-    InsufficientFundsError,
-    ValutaTradeError,
-)
 from valutatrade_hub.infra.settings import SettingsLoader
+from valutatrade_hub.decorators import handle_errors
 
 _settings = SettingsLoader()
 BASE_CURRENCY_CODE = (_settings.get('default_base_currency') or 'USD').strip().upper()
 
 SESSION = {'user': None}
-
-
-def _show_supported_codes():
-    codes = ', '.join(sorted(list_supported_codes().keys()))
-    print(f'Поддерживаемые валюты: {codes}')
-
-
-def _print_currency_hint():
-    print("Подсказка: используйте 'help get-rate' для справки по командам.")
-    _show_supported_codes()
-
-
-def handle_errors(func):
-    """Decorator that standardises error output for CLI handlers."""
-
-    @wraps(func)
-    def wrapper(*args, **kwargs):
-        try:
-            return func(*args, **kwargs)
-        except InsufficientFundsError as error:
-            print(error)
-        except CurrencyNotFoundError as error:
-            print(error)
-            _print_currency_hint()
-        except ApiRequestError as error:
-            print(error)
-            print('Попробуйте повторить запрос позже или проверьте соединение.')
-        except ValutaTradeError as error:
-            print(error)
-        except ValueError as error:
-            print(error)
-
-    return wrapper
 
 
 def format_balance(value, currency):

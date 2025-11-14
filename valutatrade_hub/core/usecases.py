@@ -15,11 +15,13 @@ from valutatrade_hub.core.utils import (
     save_users,
 )
 from valutatrade_hub.infra.settings import SettingsLoader
+from valutatrade_hub.decorators import log_action
 
 _settings = SettingsLoader()
 BASE_CURRENCY_CODE = (_settings.get('default_base_currency') or 'USD').strip().upper()
 
 
+@log_action('REGISTER')
 def register_user(username, password):
     """Create a new user with an empty portfolio."""
     if not username:
@@ -58,6 +60,7 @@ def register_user(username, password):
     }
 
 
+@log_action('LOGIN')
 def login_user(username, password):
     """Validate credentials and return session data."""
     users = load_users()
@@ -145,6 +148,7 @@ def _get_wallet(record, currency_code):
     return wallet_data
 
 
+@log_action('BUY', verbose=True)
 def buy_currency(user_id, currency_code, amount):
     """Buy currency using base funds."""
     currency_code = currency_code.strip().upper()
@@ -200,6 +204,7 @@ def buy_currency(user_id, currency_code, amount):
     }
 
 
+@log_action('SELL', verbose=True)
 def sell_currency(user_id, currency_code, amount):
     """Sell currency and credit base funds (base sales only withdraw)."""
     currency_code = currency_code.strip().upper()

@@ -13,6 +13,9 @@ DEFAULT_CONFIG = {
     'default_base_currency': 'USD',
     'logs_dir': 'logs',
     'log_file': 'logs/app.log',
+    'actions_log_file': 'logs/actions.log',
+    'log_max_bytes': 262144,
+    'log_backup_count': 3,
     'log_format': '[%(levelname)s] %(asctime)s %(name)s: %(message)s',
 }
 
