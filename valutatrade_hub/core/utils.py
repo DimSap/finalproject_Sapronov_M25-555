@@ -1,18 +1,29 @@
 import hashlib
 import json
+import re
 import secrets
 from datetime import datetime, timedelta
 from pathlib import Path
 
 from valutatrade_hub.constants import DEFAULT_RATES, RATE_FRESH_MINUTES, RATE_SOURCE
+from valutatrade_hub.infra.settings import SettingsLoader
 
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
-DATA_DIR = BASE_DIR / 'data'
-USERS_FILE = DATA_DIR / 'users.json'
-PORTFOLIOS_FILE = DATA_DIR / 'portfolios.json'
-RATES_FILE = DATA_DIR / 'rates.json'
+_settings = SettingsLoader()
 
-FRESH_LIMIT = timedelta(minutes=RATE_FRESH_MINUTES)
+
+def _config_path(key, default):
+    value = _settings.get(key, default)
+    return BASE_DIR / value
+
+
+DATA_DIR = _config_path('data_dir', 'data')
+USERS_FILE = _config_path('users_file', 'data/users.json')
+PORTFOLIOS_FILE = _config_path('portfolios_file', 'data/portfolios.json')
+RATES_FILE = _config_path('rates_file', 'data/rates.json')
+
+RATE_TTL_SECONDS = int(_settings.get('rates_ttl_seconds', RATE_FRESH_MINUTES * 60))
+FRESH_LIMIT = timedelta(seconds=RATE_TTL_SECONDS)
 
 
 def ensure_file(path, default):
@@ -106,9 +117,15 @@ def current_time_iso():
     return datetime.utcnow().replace(microsecond=0).isoformat()
 
 
+_CODE_PATTERN = re.compile(r'^[A-Z]{2,5}$')
+
+
 def is_currency_code(value):
     """Validate that value looks like an upper-case currency code."""
-    return isinstance(value, str) and value.strip() and value.upper() == value
+    if not isinstance(value, str):
+        return False
+    stripped = value.strip()
+    return bool(_CODE_PATTERN.match(stripped))
 
 
 def is_amount_valid(value):

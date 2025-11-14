@@ -1,5 +1,6 @@
-from .models import Portfolio, User, Wallet
-from .utils import (
+from valutatrade_hub.core.currencies import get_currency
+from valutatrade_hub.core.models import Portfolio, User, Wallet
+from valutatrade_hub.core.utils import (
     current_time_iso,
     find_portfolio,
     find_user,
@@ -7,13 +8,16 @@ from .utils import (
     get_exchange_rate,
     hash_password,
     is_amount_valid,
-    is_currency_code,
     load_portfolios,
     load_users,
     next_user_id,
     save_portfolios,
     save_users,
 )
+from valutatrade_hub.infra.settings import SettingsLoader
+
+_settings = SettingsLoader()
+BASE_CURRENCY_CODE = (_settings.get('default_base_currency') or 'USD').strip().upper()
 
 
 def register_user(username, password):
@@ -71,11 +75,10 @@ def login_user(username, password):
     }
 
 
-def get_portfolio_overview(user_id, base_currency='USD'):
+def get_portfolio_overview(user_id, base_currency=BASE_CURRENCY_CODE):
     """Return converted balances for all user wallets."""
-    base_currency = base_currency.upper()
-    if not is_currency_code(base_currency):
-        raise ValueError(f"Неизвестная базовая валюта '{base_currency}'")
+    base_currency = (base_currency or BASE_CURRENCY_CODE).strip().upper()
+    get_currency(base_currency)
 
     portfolios = load_portfolios()
     record = find_portfolio(portfolios, user_id)
@@ -143,10 +146,9 @@ def _get_wallet(record, currency_code):
 
 
 def buy_currency(user_id, currency_code, amount):
-    """Buy currency using USD funds."""
-    currency_code = currency_code.upper()
-    if not is_currency_code(currency_code):
-        raise ValueError('Некорректный код валюты')
+    """Buy currency using base funds."""
+    currency_code = currency_code.strip().upper()
+    get_currency(currency_code)
     if not is_amount_valid(amount):
         raise ValueError("'amount' должен быть положительным числом")
     amount = float(amount)
@@ -155,25 +157,31 @@ def buy_currency(user_id, currency_code, amount):
     record = _get_or_create_portfolio(portfolios, user_id)
 
     target_wallet_data = _get_wallet(record, currency_code)
-    usd_wallet_data = _get_wallet(record, 'USD')
+    base_wallet_data = _get_wallet(record, BASE_CURRENCY_CODE)
 
+    same_currency_as_base = currency_code == BASE_CURRENCY_CODE
     target_wallet = Wallet(currency_code, target_wallet_data.get('balance', 0.0))
-    usd_wallet = Wallet('USD', usd_wallet_data.get('balance', 0.0))
-
-    rate, updated_at = get_exchange_rate(currency_code, 'USD')
+    base_wallet = (
+        target_wallet
+        if same_currency_as_base
+        else Wallet(BASE_CURRENCY_CODE, base_wallet_data.get('balance', 0.0))
+    )
+    rate, updated_at = get_exchange_rate(currency_code, BASE_CURRENCY_CODE)
     cost = amount * rate
 
-    #if cost > usd_wallet.balance:
-    #    raise ValueError('Недостаточно средств в USD')
-
     before_target = target_wallet.balance
-    before_usd = usd_wallet.balance
+    before_base = base_wallet.balance
 
+    base_wallet.withdraw(cost)
     target_wallet.deposit(amount)
-    #usd_wallet.withdraw(cost)
 
     target_wallet_data['balance'] = target_wallet.balance
-    usd_wallet_data['balance'] = usd_wallet.balance
+    if same_currency_as_base:
+        base_wallet_data['balance'] = target_wallet.balance
+        base_after = target_wallet.balance
+    else:
+        base_wallet_data['balance'] = base_wallet.balance
+        base_after = base_wallet.balance
     save_portfolios(portfolios)
 
     return {
@@ -183,17 +191,19 @@ def buy_currency(user_id, currency_code, amount):
         'cost': cost,
         'wallet_before': before_target,
         'wallet_after': target_wallet.balance,
-        'usd_before': before_usd,
-        'usd_after': usd_wallet.balance,
+        'usd_before': before_base,
+        'usd_after': base_after,
+        'base_before': before_base,
+        'base_after': base_after,
+        'base_currency': BASE_CURRENCY_CODE,
         'updated_at': updated_at,
     }
 
 
 def sell_currency(user_id, currency_code, amount):
-    """Sell currency and credit USD funds (USD sales only withdraw)."""
-    currency_code = currency_code.upper()
-    if not is_currency_code(currency_code):
-        raise ValueError('Некорректный код валюты')
+    """Sell currency and credit base funds (base sales only withdraw)."""
+    currency_code = currency_code.strip().upper()
+    get_currency(currency_code)
     if not is_amount_valid(amount):
         raise ValueError("'amount' должен быть положительным числом")
     amount = float(amount)
@@ -205,33 +215,30 @@ def sell_currency(user_id, currency_code, amount):
         raise ValueError(f"У вас нет кошелька '{currency_code}'")
 
     target_wallet_data = wallets[currency_code]
-    usd_wallet_data = _get_wallet(record, 'USD')
+    base_wallet_data = _get_wallet(record, BASE_CURRENCY_CODE)
 
     target_wallet = Wallet(currency_code, target_wallet_data.get('balance', 0.0))
-    usd_wallet = Wallet('USD', usd_wallet_data.get('balance', 0.0))
+    base_wallet = Wallet(BASE_CURRENCY_CODE, base_wallet_data.get('balance', 0.0))
 
-    if amount > target_wallet.balance:
-        raise ValueError(f"Недостаточно средств: доступно {target_wallet.balance:.4f} {currency_code}, требуется {amount:.4f} {currency_code}")
-
-    same_currency_as_usd = currency_code == 'USD'
-    rate, updated_at = get_exchange_rate(currency_code, 'USD')
+    same_currency_as_base = currency_code == BASE_CURRENCY_CODE
+    rate, updated_at = get_exchange_rate(currency_code, BASE_CURRENCY_CODE)
     revenue = amount * rate
 
     before_target = target_wallet.balance
-    before_usd = usd_wallet.balance
+    before_base = base_wallet.balance
 
     target_wallet.withdraw(amount)
-    # Selling USD is a special case: funds stay in the same wallet, so we do not re-credit them.
-    if not same_currency_as_usd:
-        usd_wallet.deposit(revenue)
+    # Selling the base currency keeps funds in the same wallet, so we do not re-credit them.
+    if not same_currency_as_base:
+        base_wallet.deposit(revenue)
 
     target_wallet_data['balance'] = target_wallet.balance
-    if same_currency_as_usd:
-        usd_wallet_data['balance'] = target_wallet.balance
-        usd_after = target_wallet.balance
+    if same_currency_as_base:
+        base_wallet_data['balance'] = target_wallet.balance
+        base_after = target_wallet.balance
     else:
-        usd_wallet_data['balance'] = usd_wallet.balance
-        usd_after = usd_wallet.balance
+        base_wallet_data['balance'] = base_wallet.balance
+        base_after = base_wallet.balance
     save_portfolios(portfolios)
 
     return {
@@ -241,18 +248,21 @@ def sell_currency(user_id, currency_code, amount):
         'revenue': revenue,
         'wallet_before': before_target,
         'wallet_after': target_wallet.balance,
-        'usd_before': before_usd,
-        'usd_after': usd_after,
+        'usd_before': before_base,
+        'usd_after': base_after,
+        'base_before': before_base,
+        'base_after': base_after,
+        'base_currency': BASE_CURRENCY_CODE,
         'updated_at': updated_at,
     }
 
 
 def fetch_rate(from_currency, to_currency):
     """Fetch current exchange rate for the currency pair."""
-    from_currency = from_currency.upper()
-    to_currency = to_currency.upper()
-    if not is_currency_code(from_currency) or not is_currency_code(to_currency):
-        raise ValueError('Некорректные коды валют')
+    from_currency = from_currency.strip().upper()
+    to_currency = to_currency.strip().upper()
+    get_currency(from_currency)
+    get_currency(to_currency)
 
     rate, updated_at = get_exchange_rate(from_currency, to_currency)
     inverse = None
