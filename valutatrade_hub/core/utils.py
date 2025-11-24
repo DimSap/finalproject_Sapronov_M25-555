@@ -70,7 +70,16 @@ def save_portfolios(portfolios):
 
 def load_rates():
     """Return cached currency rates."""
-    return load_json(RATES_FILE, {})
+    default = {'pairs': {}, 'last_refresh': None}
+    raw = load_json(RATES_FILE, default)
+    if isinstance(raw, dict):
+        pairs = raw.get('pairs')
+        if isinstance(pairs, dict):
+            cleaned = {key: value for key, value in pairs.items() if isinstance(value, dict) and 'rate' in value}
+            return {'pairs': cleaned, 'last_refresh': raw.get('last_refresh')}
+        converted = {key: value for key, value in raw.items() if isinstance(value, dict) and 'rate' in value}
+        return {'pairs': converted, 'last_refresh': raw.get('last_refresh')}
+    return default
 
 
 def save_rates(rates):
@@ -143,7 +152,8 @@ def get_rate_key(base, quote):
 
 def read_rate_entry(rates, key):
     """Retrieve a stored rate entry by key."""
-    entry = rates.get(key)
+    pairs = rates.get('pairs', {})
+    entry = pairs.get(key)
     if isinstance(entry, dict) and 'rate' in entry:
         return entry
     return None
@@ -174,17 +184,21 @@ def get_exchange_rate(from_currency, to_currency):
     key = get_rate_key(from_currency, to_currency)
     entry = read_rate_entry(rates, key)
     if entry:
-        updated_at = datetime.fromisoformat(entry['updated_at'])
+        updated_at_str = entry['updated_at']
+        if updated_at_str.endswith('Z'):
+            updated_at_str = updated_at_str[:-1] + '+00:00'
+        updated_at = datetime.fromisoformat(updated_at_str)
         if datetime.utcnow() - updated_at <= FRESH_LIMIT:
             return entry['rate'], entry['updated_at']
 
     rate = default_rate(from_currency, to_currency)
     timestamp = current_time_iso()
-    rates[key] = {
+    pairs = rates.setdefault('pairs', {})
+    pairs[key] = {
         'rate': rate,
         'updated_at': timestamp,
+        'source': RATE_SOURCE,
     }
-    rates['source'] = RATE_SOURCE
     rates['last_refresh'] = timestamp
     save_rates(rates)
     return rate, timestamp
