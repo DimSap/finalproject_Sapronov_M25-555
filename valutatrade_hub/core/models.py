@@ -135,24 +135,12 @@ class Portfolio:
             raise ValueError('Currency already exists in portfolio')
         self._wallets[currency_code] = Wallet(currency_code)
 
-    def get_total_value(self, base_currency='USD'):
-        """Calculate total portfolio value in base currency."""
-        exchange_rates = {
-            'USD': 1.0,
-            'EUR': 1.1,
-            'BTC': 60000.0,
-            'ETH': 3000.0,
-        }
-        if base_currency not in exchange_rates:
-            raise ValueError('Unknown base currency')
-        total_in_usd = 0.0
-        for wallet in self._wallets.values():
-            if wallet.currency_code not in exchange_rates:
-                raise ValueError('Missing exchange rate for currency')
-            total_in_usd += wallet.balance * exchange_rates[wallet.currency_code]
-        if base_currency == 'USD':
-            return total_in_usd
-        return total_in_usd / exchange_rates[base_currency]
+    def create_or_get_wallet(self, currency_code):
+        wallet = self._wallets.get(currency_code)
+        if wallet is None:
+            wallet = Wallet(currency_code)
+            self._wallets[currency_code] = wallet
+        return wallet
 
     def get_wallet(self, currency_code):
         """Return wallet by currency."""

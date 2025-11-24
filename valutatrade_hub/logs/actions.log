@@ -4,3 +4,4 @@
 [INFO] 2025-11-14 09:59:34,453 valutatrade.actions: timestamp=2025-11-14T06:59:34 action=LOGIN user_id=2 username=dima result=OK
 [INFO] 2025-11-14 09:59:49,994 valutatrade.actions: timestamp=2025-11-14T06:59:49 action=BUY user_id=2 currency_code=BTC amount=0.001 rate=59337.21 base_currency=USD result=OK wallet=0.12100000000000001->0.12200000000000001 base=2128.77909->2069.44188
 [INFO] 2025-11-14 09:59:55,001 valutatrade.actions: timestamp=2025-11-14T06:59:54 action=SELL user_id=2 currency_code=BTC amount=0.001 rate=59337.21 base_currency=USD result=OK wallet=0.12200000000000001->0.12100000000000001 base=2069.44188->2128.77909
+[INFO] 2025-11-14 14:35:49,395 valutatrade.actions: timestamp=2025-11-14T11:35:49 action=LOGIN user_id=2 username=dima result=OK

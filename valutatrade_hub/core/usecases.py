@@ -1,4 +1,5 @@
 from valutatrade_hub.core.currencies import get_currency
+from valutatrade_hub.core.exceptions import ApiRequestError, InsufficientFundsError
 from valutatrade_hub.core.models import Portfolio, User, Wallet
 from valutatrade_hub.core.utils import (
     current_time_iso,
@@ -189,6 +190,7 @@ def buy_currency(user_id, currency_code, amount):
     save_portfolios(portfolios)
 
     return {
+        'user_id': user_id,
         'currency_code': currency_code,
         'amount': amount,
         'rate': rate,
@@ -217,7 +219,7 @@ def sell_currency(user_id, currency_code, amount):
     record = _get_or_create_portfolio(portfolios, user_id)
     wallets = record.setdefault('wallets', {})
     if currency_code not in wallets:
-        raise ValueError(f"У вас нет кошелька '{currency_code}'")
+        raise InsufficientFundsError(0.0, amount, currency_code)
 
     target_wallet_data = wallets[currency_code]
     base_wallet_data = _get_wallet(record, BASE_CURRENCY_CODE)
@@ -247,6 +249,7 @@ def sell_currency(user_id, currency_code, amount):
     save_portfolios(portfolios)
 
     return {
+        'user_id': user_id,
         'currency_code': currency_code,
         'amount': amount,
         'rate': rate,
@@ -269,11 +272,14 @@ def fetch_rate(from_currency, to_currency):
     get_currency(from_currency)
     get_currency(to_currency)
 
-    rate, updated_at = get_exchange_rate(from_currency, to_currency)
+    try:
+        rate, updated_at = get_exchange_rate(from_currency, to_currency)
+    except ValueError as error:
+        raise ApiRequestError(str(error))
     inverse = None
     if from_currency != to_currency:
         if rate == 0:
-            raise ValueError('Курс недоступен')
+            raise ApiRequestError('Курс недоступен')
         inverse = 1 / rate
     return {
         'from': from_currency,
