@@ -97,6 +97,8 @@ poetry run project show-rates --currency BTC --top 5
 - CoinGecko — криптовалюты (`BTC`, `ETH`, `SOL`).
 - ExchangeRate-API — фиат (`EUR`, `GBP`, `RUB`).
 
+URL'ы клиентов, базовая валюта, списки крипто/фиат валют, таймаут запросов и имена источников настраиваются через `config.json` (`parser_*` ключи) или переменные окружения (`PARSER_COINGECKO_URL`, `PARSER_FIAT_CODES`, `PARSER_CRYPTO_CODES`, `PARSER_REQUEST_TIMEOUT`, и т.д.).
+
 ---
 
 ## Конфигурация
