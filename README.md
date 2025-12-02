@@ -132,3 +132,7 @@ URL'ы клиентов, базовая валюта, списки крипто/
 8. `update-rates` и `show-rates --currency BTC`.
 
 Сценарий покрывает все требования демонстрации: happy-path + обновление курсов и сообщение об ошибке при недостатке средств.
+
+Демо использования 
+
+[![asciicast](https://asciinema.org/a/6LxLvIdW9B4YKLIH6kMHAf4u8.svg)](https://asciinema.org/a/6LxLvIdW9B4YKLIH6kMHAf4u8)
