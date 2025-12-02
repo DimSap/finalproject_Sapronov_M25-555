@@ -118,30 +118,7 @@ def get_portfolio_overview(user_id, base_currency=BASE_CURRENCY_CODE):
         wallets[code] = Wallet(code, data.get('balance', 0.0))
     portfolio = Portfolio(user_id, wallets)
 
-    items = []
-    total = 0.0
-    update_marks = []
-
-    for code, wallet in portfolio.wallets.items():
-        rate, updated_at = get_exchange_rate(code, base_currency)
-        converted = wallet.balance * rate
-        items.append({
-            'currency_code': code,
-            'balance': wallet.balance,
-            'rate': rate,
-            'converted': converted,
-            'updated_at': updated_at,
-        })
-        total += converted
-        update_marks.append(updated_at)
-
-    last_update = max(update_marks) if update_marks else None
-    return {
-        'wallets': items,
-        'total': total,
-        'base_currency': base_currency,
-        'last_update': last_update,
-    }
+    return portfolio.get_total_value(base_currency)
 
 
 def _get_or_create_portfolio(portfolios, user_id):

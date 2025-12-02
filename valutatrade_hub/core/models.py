@@ -2,6 +2,7 @@ import hashlib
 from datetime import datetime
 
 from valutatrade_hub.core.exceptions import InsufficientFundsError
+from valutatrade_hub.core.utils import get_exchange_rate
 
 
 class User:
@@ -145,4 +146,37 @@ class Portfolio:
     def get_wallet(self, currency_code):
         """Return wallet by currency."""
         return self._wallets.get(currency_code)
+
+    def get_total_value(self, base_currency='USD'):
+        """
+        Calculate total portfolio value in the specified base currency.
+
+        Returns a dict with aggregated information so callers can reuse it
+        for CLI output or reporting.
+        """
+        base_code = (base_currency or 'USD').strip().upper()
+        total = 0.0
+        items = []
+        timestamps = []
+
+        for code, wallet in self._wallets.items():
+            rate, updated_at = get_exchange_rate(code, base_code)
+            converted = wallet.balance * rate
+            items.append({
+                'currency_code': code,
+                'balance': wallet.balance,
+                'rate': rate,
+                'converted': converted,
+                'updated_at': updated_at,
+            })
+            total += converted
+            timestamps.append(updated_at)
+
+        last_update = max(timestamps) if timestamps else None
+        return {
+            'wallets': items,
+            'total': total,
+            'base_currency': base_code,
+            'last_update': last_update,
+        }
 
