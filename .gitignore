@@ -6,3 +6,9 @@ dist/
 db_meta.json
 *.cast
 data/
+
+# Runtime logs
+logs/
+valutatrade_hub/logs/
+*.log
+*.log.*
