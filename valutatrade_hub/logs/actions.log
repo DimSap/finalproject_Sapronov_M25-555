@@ -105,3 +105,19 @@
 [INFO] 2025-12-02 11:28:25,794 valutatrade.actions.parser: Запрос к ExchangeRate-API
 [INFO] 2025-12-02 11:28:26,028 valutatrade.actions.parser: Получено 3 курсов от ExchangeRate-API
 [INFO] 2025-12-02 11:28:26,050 valutatrade.actions.parser: Обновление завершено. Успешно обновлено 6 пар.
+[INFO] 2025-12-02 11:32:10,824 valutatrade.actions.parser: Начато обновление курсов
+[INFO] 2025-12-02 11:32:10,825 valutatrade.actions.parser: Запрос к CoinGecko
+[INFO] 2025-12-02 11:32:11,198 valutatrade.actions.parser: Получено 3 курсов от CoinGecko
+[INFO] 2025-12-02 11:32:11,199 valutatrade.actions.parser: Запрос к ExchangeRate-API
+[INFO] 2025-12-02 11:32:11,482 valutatrade.actions.parser: Получено 3 курсов от ExchangeRate-API
+[INFO] 2025-12-02 11:32:11,500 valutatrade.actions.parser: Обновление завершено. Успешно обновлено 6 пар.
+[INFO] 2025-12-02 11:49:08,201 valutatrade.actions: timestamp=2025-12-02T08:49:08 action=REGISTER user_id=3 username=demo12345 result=OK
+[INFO] 2025-12-02 11:49:18,372 valutatrade.actions: timestamp=2025-12-02T08:49:18 action=LOGIN user_id=3 username=demo12345 result=OK
+[INFO] 2025-12-02 11:49:35,870 valutatrade.actions: timestamp=2025-12-02T08:49:35 action=BUY user_id=3 currency_code=BTC amount=0.01 rate=59337.21 base_currency=USD result=OK wallet=0.0->0.01 base=1000.0->406.62789999999995
+[INFO] 2025-12-02 11:49:47,580 valutatrade.actions.parser: Начато обновление курсов
+[INFO] 2025-12-02 11:49:47,582 valutatrade.actions.parser: Запрос к CoinGecko
+[INFO] 2025-12-02 11:49:47,940 valutatrade.actions.parser: Получено 3 курсов от CoinGecko
+[INFO] 2025-12-02 11:49:47,941 valutatrade.actions.parser: Запрос к ExchangeRate-API
+[INFO] 2025-12-02 11:49:48,240 valutatrade.actions.parser: Получено 3 курсов от ExchangeRate-API
+[INFO] 2025-12-02 11:49:48,257 valutatrade.actions.parser: Обновление завершено. Успешно обновлено 6 пар.
+[INFO] 2025-12-02 11:49:55,813 valutatrade.actions: timestamp=2025-12-02T08:49:55 action=SELL user_id=3 currency_code=BTC amount=0.005 rate=86619.0 base_currency=USD result=OK wallet=0.01->0.005 base=406.62789999999995->839.7229

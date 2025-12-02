@@ -8,6 +8,7 @@ CLI-платформа для учебного управления мульти
 - обновление курсов из CoinGecko и ExchangeRate-API (через Parser Service);
 - кеширование курсов с TTL и fallback на дефолтные значения;
 - подробное логирование действий и ошибок в `logs/actions.log`.
+- автоматический стартовый депозит 1000 USD (значение настраивается `initial_base_balance`).
 
 ---
 
@@ -68,7 +69,7 @@ poetry run project show-rates --currency BTC --top 5
 ---
 
 ## Команды CLI (кратко)
-- `register --username --password` — создаёт пользователя.
+- `register --username --password` — создаёт пользователя и начисляет стартовый депозит (по умолчанию 1000 USD).
 - `login --username --password` — активирует сессию (хранится в памяти CLI).
 - `show-portfolio [--base USD]` — выводит баланс кошельков + пересчёт в базовую валюту.
 - `buy --currency XXX --amount N` — списывает базовую валюту и пополняет нужный кошелёк.
@@ -105,6 +106,7 @@ URL'ы клиентов, базовая валюта, списки крипто/
 Все основные пути и параметры лежат в `config.json`:
 - каталоги данных/логов;
 - базовая валюта (`default_base_currency`);
+- стартовый баланс новых пользователей (`initial_base_balance`, по умолчанию 1000 USD);
 - размер лог-файла и формат сообщений;
 - TTL курсов.
 
@@ -122,7 +124,7 @@ URL'ы клиентов, базовая валюта, списки крипто/
 ## Сценарий демо
 1. `register --username demo --password secret`.
 2. `login --username demo --password secret`.
-3. Пополните базовый кошелёк (например, добавьте USD в `data/portfolios.json` либо выполните тестовую продажу).
+3. При необходимости увеличьте баланс базовой валюты (стартовые 1000 USD уже начислены автоматически).
 4. `buy --currency BTC --amount 0.01`.
 5. `sell --currency BTC --amount 0.005`.
 6. `show-portfolio`.

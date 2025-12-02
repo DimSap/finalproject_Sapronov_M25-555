@@ -22,6 +22,18 @@ _settings = SettingsLoader()
 BASE_CURRENCY_CODE = (_settings.get('default_base_currency') or 'USD').strip().upper()
 
 
+def _initial_base_balance():
+    raw_value = _settings.get('initial_base_balance', 1000.0)
+    try:
+        amount = float(raw_value)
+    except (TypeError, ValueError):
+        return 0.0
+    return max(amount, 0.0)
+
+
+INITIAL_BASE_BALANCE = _initial_base_balance()
+
+
 @log_action('REGISTER')
 def register_user(username, password):
     """Create a new user with an empty portfolio."""
@@ -49,9 +61,15 @@ def register_user(username, password):
     save_users(users)
 
     portfolios = load_portfolios()
+    base_wallets = {}
+    if INITIAL_BASE_BALANCE > 0:
+        base_wallets[BASE_CURRENCY_CODE] = {
+            'currency_code': BASE_CURRENCY_CODE,
+            'balance': INITIAL_BASE_BALANCE,
+        }
     portfolios.append({
         'user_id': user_id,
-        'wallets': {},
+        'wallets': base_wallets,
     })
     save_portfolios(portfolios)
 

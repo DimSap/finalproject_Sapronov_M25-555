@@ -12,6 +12,7 @@ DEFAULT_CONFIG = {
     'rates_history_file': 'data/exchange_rates.json',
     'rates_ttl_seconds': 300,
     'default_base_currency': 'USD',
+    'initial_base_balance': 1000.0,
     'logs_dir': 'logs',
     'log_file': 'logs/app.log',
     'actions_log_file': 'actions.log',
