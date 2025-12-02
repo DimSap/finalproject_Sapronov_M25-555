@@ -3,6 +3,7 @@
   "users_file": "data/users.json",
   "portfolios_file": "data/portfolios.json",
   "rates_file": "data/rates.json",
+  "rates_history_file": "data/exchange_rates.json",
   "rates_ttl_seconds": 300,
   "default_base_currency": "USD",
   "logs_dir": "logs",
@@ -10,6 +11,27 @@
   "actions_log_file": "actions.log",
   "log_max_bytes": 262144,
   "log_backup_count": 3,
-  "log_format": "[%(levelname)s] %(asctime)s %(name)s: %(message)s"
+  "log_format": "[%(levelname)s] %(asctime)s %(name)s: %(message)s",
+  "parser_coingecko_url": "https://api.coingecko.com/api/v3/simple/price",
+  "parser_exchangerate_api_url": "https://v6.exchangerate-api.com/v6",
+  "parser_base_currency": "USD",
+  "parser_fiat_currencies": [
+    "EUR",
+    "GBP",
+    "RUB"
+  ],
+  "parser_crypto_currencies": [
+    "BTC",
+    "ETH",
+    "SOL"
+  ],
+  "parser_crypto_id_map": {
+    "BTC": "bitcoin",
+    "ETH": "ethereum",
+    "SOL": "solana"
+  },
+  "parser_request_timeout": 10,
+  "parser_crypto_source_name": "CoinGecko",
+  "parser_fiat_source_name": "ExchangeRate-API"
 }
 

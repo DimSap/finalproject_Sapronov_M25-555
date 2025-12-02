@@ -5,3 +5,103 @@
 [INFO] 2025-11-14 09:59:49,994 valutatrade.actions: timestamp=2025-11-14T06:59:49 action=BUY user_id=2 currency_code=BTC amount=0.001 rate=59337.21 base_currency=USD result=OK wallet=0.12100000000000001->0.12200000000000001 base=2128.77909->2069.44188
 [INFO] 2025-11-14 09:59:55,001 valutatrade.actions: timestamp=2025-11-14T06:59:54 action=SELL user_id=2 currency_code=BTC amount=0.001 rate=59337.21 base_currency=USD result=OK wallet=0.12200000000000001->0.12100000000000001 base=2069.44188->2128.77909
 [INFO] 2025-11-14 14:35:49,395 valutatrade.actions: timestamp=2025-11-14T11:35:49 action=LOGIN user_id=2 username=dima result=OK
+[INFO] 2025-11-24 20:17:35,192 valutatrade.actions.parser: Начато обновление курсов
+[INFO] 2025-11-24 20:17:35,195 valutatrade.actions.parser: Запрос к CoinGecko
+[INFO] 2025-11-24 20:17:35,537 valutatrade.actions.parser: Получено 3 курсов от CoinGecko
+[INFO] 2025-11-24 20:17:35,537 valutatrade.actions.parser: Запрос к ExchangeRate-API
+[ERROR] 2025-11-24 20:17:35,812 valutatrade.actions.parser: Ошибка при обращении к ExchangeRate-API: Ошибка при обращении к внешнему API: ExchangeRate-API вернул статус 403
+[INFO] 2025-11-24 20:19:11,140 valutatrade.actions.parser: Начато обновление курсов
+[INFO] 2025-11-24 20:19:11,143 valutatrade.actions.parser: Запрос к CoinGecko
+[INFO] 2025-11-24 20:19:11,549 valutatrade.actions.parser: Получено 3 курсов от CoinGecko
+[INFO] 2025-11-24 20:19:11,550 valutatrade.actions.parser: Запрос к ExchangeRate-API
+[ERROR] 2025-11-24 20:19:11,841 valutatrade.actions.parser: Ошибка при обращении к ExchangeRate-API: Ошибка при обращении к внешнему API: ExchangeRate-API вернул статус 403
+[INFO] 2025-11-24 20:19:11,859 valutatrade.actions.parser: Обновление завершено. Успешно обновлено 3 пар.
+[WARNING] 2025-11-24 20:19:11,860 valutatrade.actions.parser: Источник ExchangeRate-API завершился с ошибкой: Ошибка при обращении к внешнему API: ExchangeRate-API вернул статус 403
+[INFO] 2025-11-24 20:20:56,648 valutatrade.actions.parser: Начато обновление курсов
+[INFO] 2025-11-24 20:20:56,649 valutatrade.actions.parser: Запрос к CoinGecko
+[INFO] 2025-11-24 20:20:56,985 valutatrade.actions.parser: Получено 3 курсов от CoinGecko
+[INFO] 2025-11-24 20:20:56,986 valutatrade.actions.parser: Запрос к ExchangeRate-API
+[INFO] 2025-11-24 20:20:57,212 valutatrade.actions.parser: Получено 0 курсов от ExchangeRate-API
+[INFO] 2025-11-24 20:20:57,225 valutatrade.actions.parser: Обновление завершено. Успешно обновлено 3 пар.
+[INFO] 2025-11-24 20:22:50,476 valutatrade.actions.parser: Начато обновление курсов
+[INFO] 2025-11-24 20:22:50,478 valutatrade.actions.parser: Запрос к CoinGecko
+[INFO] 2025-11-24 20:22:50,795 valutatrade.actions.parser: Получено 3 курсов от CoinGecko
+[INFO] 2025-11-24 20:22:50,796 valutatrade.actions.parser: Запрос к ExchangeRate-API
+[INFO] 2025-11-24 20:22:51,028 valutatrade.actions.parser: Получено 3 курсов от ExchangeRate-API
+[INFO] 2025-11-24 20:22:51,063 valutatrade.actions.parser: Обновление завершено. Успешно обновлено 6 пар.
+[INFO] 2025-11-24 20:25:03,885 valutatrade.actions.parser: Начато обновление курсов
+[INFO] 2025-11-24 20:25:03,887 valutatrade.actions.parser: Запрос к CoinGecko
+[INFO] 2025-11-24 20:25:04,263 valutatrade.actions.parser: Получено 3 курсов от CoinGecko
+[INFO] 2025-11-24 20:25:04,264 valutatrade.actions.parser: Запрос к ExchangeRate-API
+[INFO] 2025-11-24 20:25:04,566 valutatrade.actions.parser: Получено 3 курсов от ExchangeRate-API
+[INFO] 2025-11-24 20:25:04,583 valutatrade.actions.parser: Обновление завершено. Успешно обновлено 3 пар.
+[INFO] 2025-12-02 10:17:33,481 valutatrade.actions.parser: Начато обновление курсов
+[INFO] 2025-12-02 10:17:33,485 valutatrade.actions.parser: Запрос к CoinGecko
+[INFO] 2025-12-02 10:17:33,940 valutatrade.actions.parser: Получено 3 курсов от CoinGecko
+[INFO] 2025-12-02 10:17:33,941 valutatrade.actions.parser: Запрос к ExchangeRate-API
+[ERROR] 2025-12-02 10:17:34,377 valutatrade.actions.parser: Ошибка при обращении к ExchangeRate-API: Ошибка при обращении к внешнему API: ExchangeRate-API вернул статус 403
+[INFO] 2025-12-02 10:17:34,399 valutatrade.actions.parser: Обновление завершено. Успешно обновлено 3 пар.
+[WARNING] 2025-12-02 10:17:34,400 valutatrade.actions.parser: Источник ExchangeRate-API завершился с ошибкой: Ошибка при обращении к внешнему API: ExchangeRate-API вернул статус 403
+[INFO] 2025-12-02 10:18:08,223 valutatrade.actions.parser: Начато обновление курсов
+[INFO] 2025-12-02 10:18:08,223 valutatrade.actions.parser: Запрос к CoinGecko
+[INFO] 2025-12-02 10:18:08,425 valutatrade.actions.parser: Получено 3 курсов от CoinGecko
+[INFO] 2025-12-02 10:18:08,426 valutatrade.actions.parser: Запрос к ExchangeRate-API
+[ERROR] 2025-12-02 10:18:08,672 valutatrade.actions.parser: Ошибка при обращении к ExchangeRate-API: Ошибка при обращении к внешнему API: ExchangeRate-API вернул статус 403
+[INFO] 2025-12-02 10:18:08,691 valutatrade.actions.parser: Обновление завершено. Успешно обновлено 3 пар.
+[WARNING] 2025-12-02 10:18:08,691 valutatrade.actions.parser: Источник ExchangeRate-API завершился с ошибкой: Ошибка при обращении к внешнему API: ExchangeRate-API вернул статус 403
+[INFO] 2025-12-02 10:21:34,350 valutatrade.actions.parser: Начато обновление курсов
+[INFO] 2025-12-02 10:21:34,350 valutatrade.actions.parser: Запрос к CoinGecko
+[INFO] 2025-12-02 10:21:34,702 valutatrade.actions.parser: Получено 3 курсов от CoinGecko
+[INFO] 2025-12-02 10:21:34,703 valutatrade.actions.parser: Запрос к ExchangeRate-API
+[INFO] 2025-12-02 10:21:34,976 valutatrade.actions.parser: Получено 3 курсов от ExchangeRate-API
+[INFO] 2025-12-02 10:21:35,004 valutatrade.actions.parser: Обновление завершено. Успешно обновлено 6 пар.
+[INFO] 2025-12-02 10:40:54,576 valutatrade.actions.parser: Начато обновление курсов
+[INFO] 2025-12-02 10:40:54,577 valutatrade.actions.parser: Запрос к CoinGecko
+[INFO] 2025-12-02 10:40:54,926 valutatrade.actions.parser: Получено 3 курсов от CoinGecko
+[INFO] 2025-12-02 10:40:54,926 valutatrade.actions.parser: Запрос к ExchangeRate-API
+[INFO] 2025-12-02 10:40:55,164 valutatrade.actions.parser: Получено 3 курсов от ExchangeRate-API
+[INFO] 2025-12-02 10:40:55,174 valutatrade.actions.parser: Обновление завершено. Успешно обновлено 3 пар.
+[INFO] 2025-12-02 11:17:02,104 valutatrade.actions.parser: Начато обновление курсов
+[INFO] 2025-12-02 11:17:02,110 valutatrade.actions.parser: Запрос к CoinGecko
+[INFO] 2025-12-02 11:17:02,549 valutatrade.actions.parser: Получено 3 курсов от CoinGecko
+[INFO] 2025-12-02 11:17:02,550 valutatrade.actions.parser: Запрос к ExchangeRate-API
+[INFO] 2025-12-02 11:17:02,816 valutatrade.actions.parser: Получено 3 курсов от ExchangeRate-API
+[INFO] 2025-12-02 11:17:02,833 valutatrade.actions.parser: Обновление завершено. Успешно обновлено 3 пар.
+[INFO] 2025-12-02 11:17:24,851 valutatrade.actions.parser: Начато обновление курсов
+[INFO] 2025-12-02 11:17:24,853 valutatrade.actions.parser: Запрос к CoinGecko
+[INFO] 2025-12-02 11:17:25,034 valutatrade.actions.parser: Получено 3 курсов от CoinGecko
+[INFO] 2025-12-02 11:17:25,034 valutatrade.actions.parser: Запрос к ExchangeRate-API
+[INFO] 2025-12-02 11:17:25,311 valutatrade.actions.parser: Получено 3 курсов от ExchangeRate-API
+[INFO] 2025-12-02 11:17:25,328 valutatrade.actions.parser: Обновление завершено. Успешно обновлено 3 пар.
+[INFO] 2025-12-02 11:21:39,092 valutatrade.actions.parser: Начато обновление курсов
+[INFO] 2025-12-02 11:21:39,095 valutatrade.actions.parser: Запрос к CoinGecko
+[INFO] 2025-12-02 11:21:39,478 valutatrade.actions.parser: Получено 3 курсов от CoinGecko
+[INFO] 2025-12-02 11:21:39,479 valutatrade.actions.parser: Запрос к ExchangeRate-API
+[INFO] 2025-12-02 11:21:39,725 valutatrade.actions.parser: Получено 3 курсов от ExchangeRate-API
+[INFO] 2025-12-02 11:21:57,003 valutatrade.actions.parser: Начато обновление курсов
+[INFO] 2025-12-02 11:21:57,004 valutatrade.actions.parser: Запрос к CoinGecko
+[INFO] 2025-12-02 11:21:57,216 valutatrade.actions.parser: Получено 3 курсов от CoinGecko
+[INFO] 2025-12-02 11:21:57,217 valutatrade.actions.parser: Запрос к ExchangeRate-API
+[INFO] 2025-12-02 11:21:57,462 valutatrade.actions.parser: Получено 3 курсов от ExchangeRate-API
+[INFO] 2025-12-02 11:22:30,406 valutatrade.actions.parser: Начато обновление курсов
+[INFO] 2025-12-02 11:22:30,406 valutatrade.actions.parser: Запрос к CoinGecko
+[INFO] 2025-12-02 11:22:30,590 valutatrade.actions.parser: Получено 3 курсов от CoinGecko
+[INFO] 2025-12-02 11:22:30,590 valutatrade.actions.parser: Запрос к ExchangeRate-API
+[INFO] 2025-12-02 11:22:30,898 valutatrade.actions.parser: Получено 3 курсов от ExchangeRate-API
+[INFO] 2025-12-02 11:22:30,913 valutatrade.actions.parser: Обновление завершено. Успешно обновлено 3 пар.
+[INFO] 2025-12-02 11:23:13,072 valutatrade.actions.parser: Начато обновление курсов
+[INFO] 2025-12-02 11:23:13,073 valutatrade.actions.parser: Запрос к CoinGecko
+[INFO] 2025-12-02 11:23:13,423 valutatrade.actions.parser: Получено 3 курсов от CoinGecko
+[INFO] 2025-12-02 11:23:13,424 valutatrade.actions.parser: Запрос к ExchangeRate-API
+[INFO] 2025-12-02 11:23:13,720 valutatrade.actions.parser: Получено 3 курсов от ExchangeRate-API
+[INFO] 2025-12-02 11:24:06,406 valutatrade.actions.parser: Начато обновление курсов
+[INFO] 2025-12-02 11:24:06,406 valutatrade.actions.parser: Запрос к CoinGecko
+[INFO] 2025-12-02 11:24:06,643 valutatrade.actions.parser: Получено 3 курсов от CoinGecko
+[INFO] 2025-12-02 11:24:06,643 valutatrade.actions.parser: Запрос к ExchangeRate-API
+[INFO] 2025-12-02 11:24:06,902 valutatrade.actions.parser: Получено 3 курсов от ExchangeRate-API
+[INFO] 2025-12-02 11:28:25,459 valutatrade.actions.parser: Начато обновление курсов
+[INFO] 2025-12-02 11:28:25,460 valutatrade.actions.parser: Запрос к CoinGecko
+[INFO] 2025-12-02 11:28:25,793 valutatrade.actions.parser: Получено 3 курсов от CoinGecko
+[INFO] 2025-12-02 11:28:25,794 valutatrade.actions.parser: Запрос к ExchangeRate-API
+[INFO] 2025-12-02 11:28:26,028 valutatrade.actions.parser: Получено 3 курсов от ExchangeRate-API
+[INFO] 2025-12-02 11:28:26,050 valutatrade.actions.parser: Обновление завершено. Успешно обновлено 6 пар.

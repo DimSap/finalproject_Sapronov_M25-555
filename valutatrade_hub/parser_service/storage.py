@@ -9,6 +9,10 @@ HISTORY_DEFAULT = []
 RATES_DEFAULT = {"pairs": {}, "last_refresh": None}
 
 
+def _clone_default(default):
+    return json.loads(json.dumps(default))
+
+
 def ensure_history_store():
     cfg = get_parser_config()
     _ensure_file(cfg.history_file_path, HISTORY_DEFAULT)
@@ -22,8 +26,7 @@ def ensure_rates_snapshot():
 def load_history():
     cfg = get_parser_config()
     ensure_history_store()
-    with cfg.history_file_path.open("r", encoding="utf-8") as handle:
-        data = json.load(handle)
+    data = _safe_load(cfg.history_file_path, HISTORY_DEFAULT)
     if isinstance(data, list):
         return data
     if isinstance(data, dict) and "history" in data and isinstance(data["history"], list):
@@ -53,8 +56,7 @@ def append_history_entry(entry):
 def load_rates_snapshot():
     cfg = get_parser_config()
     ensure_rates_snapshot()
-    with cfg.rates_file_path.open("r", encoding="utf-8") as handle:
-        raw = json.load(handle)
+    raw = _safe_load(cfg.rates_file_path, RATES_DEFAULT)
     return _normalize_rates_payload(raw)
 
 
@@ -85,7 +87,7 @@ def upsert_rate_pair(pair, rate, updated_at, source):
 
 
 def _ensure_file(path, default):
-    if path.exists():
+    if path.exists() and path.stat().st_size > 0:
         return
     path.parent.mkdir(parents=True, exist_ok=True)
     with path.open("w", encoding="utf-8") as handle:
@@ -98,6 +100,16 @@ def _atomic_write(path, payload):
     with tmp_path.open("w", encoding="utf-8") as handle:
         json.dump(payload, handle, ensure_ascii=True, indent=2)
     tmp_path.replace(path)
+
+
+def _safe_load(path, default):
+    _ensure_file(path, default)
+    try:
+        with path.open("r", encoding="utf-8") as handle:
+            return json.load(handle)
+    except json.JSONDecodeError:
+        _atomic_write(path, default)
+        return _clone_default(default)
 
 
 def _normalize_rates_payload(raw):

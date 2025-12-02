@@ -34,11 +34,21 @@ def ensure_file(path, default):
             json.dump(default, fh, ensure_ascii=True, indent=2)
 
 
+def _clone_default(default):
+    """Return a deep copy of a JSON-serialisable default value."""
+    return json.loads(json.dumps(default))
+
+
 def load_json(path, default):
     """Load JSON data, creating the file with default content when missing."""
     ensure_file(path, default)
-    with path.open('r', encoding='utf-8') as fh:
-        return json.load(fh)
+    try:
+        with path.open('r', encoding='utf-8') as fh:
+            return json.load(fh)
+    except json.JSONDecodeError:
+        # File exists but contains invalid/empty JSON; reset to default.
+        save_json(path, default)
+        return _clone_default(default)
 
 
 def save_json(path, data):
