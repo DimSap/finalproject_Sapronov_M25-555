@@ -38,6 +38,14 @@ def build_parser():
     rate_parser.add_argument('--from', dest='from_currency', required=True)
     rate_parser.add_argument('--to', dest='to_currency', required=True)
 
+    update_parser = subparsers.add_parser('update-rates')
+    update_parser.add_argument('--source', choices=['coingecko', 'exchangerate'])
+
+    show_rates_parser = subparsers.add_parser('show-rates')
+    show_rates_parser.add_argument('--currency')
+    show_rates_parser.add_argument('--top', type=int)
+    show_rates_parser.add_argument('--base')
+
     return parser
 
 

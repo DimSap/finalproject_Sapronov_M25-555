@@ -91,7 +91,20 @@ def _collect_context(arguments, result, verbose):
 
 def _format_message(data):
     parts = []
-    for key in ('timestamp', 'action', 'user_id', 'username', 'currency_code', 'amount', 'rate', 'base_currency', 'result', 'error_type', 'error_message'):
+    log_keys = (
+        'timestamp',
+        'action',
+        'user_id',
+        'username',
+        'currency_code',
+        'amount',
+        'rate',
+        'base_currency',
+        'result',
+        'error_type',
+        'error_message',
+    )
+    for key in log_keys:
         if key in data:
             parts.append(f"{key}={data[key]}")
     if 'wallet_before' in data and 'wallet_after' in data:

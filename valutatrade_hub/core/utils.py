@@ -2,7 +2,7 @@ import hashlib
 import json
 import re
 import secrets
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
 from valutatrade_hub.constants import DEFAULT_RATES, RATE_FRESH_MINUTES, RATE_SOURCE
@@ -186,9 +186,13 @@ def get_exchange_rate(from_currency, to_currency):
     if entry:
         updated_at_str = entry['updated_at']
         if updated_at_str.endswith('Z'):
-            updated_at_str = updated_at_str[:-1] + '+00:00'
-        updated_at = datetime.fromisoformat(updated_at_str)
-        if datetime.utcnow() - updated_at <= FRESH_LIMIT:
+            updated_at = datetime.fromisoformat(updated_at_str[:-1] + '+00:00')
+        else:
+            updated_at = datetime.fromisoformat(updated_at_str)
+            if updated_at.tzinfo is None:
+                updated_at = updated_at.replace(tzinfo=timezone.utc)
+        now = datetime.utcnow().replace(tzinfo=timezone.utc)
+        if now - updated_at <= FRESH_LIMIT:
             return entry['rate'], entry['updated_at']
 
     rate = default_rate(from_currency, to_currency)

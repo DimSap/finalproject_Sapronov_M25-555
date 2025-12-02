@@ -15,8 +15,8 @@ from valutatrade_hub.core.utils import (
     save_portfolios,
     save_users,
 )
-from valutatrade_hub.infra.settings import SettingsLoader
 from valutatrade_hub.decorators import log_action
+from valutatrade_hub.infra.settings import SettingsLoader
 
 _settings = SettingsLoader()
 BASE_CURRENCY_CODE = (_settings.get('default_base_currency') or 'USD').strip().upper()
