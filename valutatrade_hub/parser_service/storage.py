@@ -2,7 +2,6 @@
 
 import json
 from datetime import datetime
-from pathlib import Path
 
 from valutatrade_hub.parser_service.config import get_parser_config
 
