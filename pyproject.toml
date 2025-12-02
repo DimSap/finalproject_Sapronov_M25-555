@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "finalproject-sapronov-m25-555"
 version = "0.1.0"
-description = ""
+description = "Educational ValutaTrade Hub CLI for managing multi-currency portfolios"
 authors = ["dmitriy.sapronov <dmitriy.sapronov@sbermarket.ru>"]
 readme = "README.md"
 
