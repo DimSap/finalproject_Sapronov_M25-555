@@ -34,11 +34,6 @@ pyproject.toml
 ## Установка
 make install     
 ```
-
-При необходимости активируйте окружение: `poetry shell`.
-
----
-
 ## Запуск CLI
 - Интерактивный режим: `make project`
 - Одноразовая команда: `poetry run project <command> [args]`
