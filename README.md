@@ -32,10 +32,7 @@ pyproject.toml
 ```
 
 ## Установка
-```bash
-git clone <repo-url>
-cd finalproject_Sapronov_M25-555
-make install          # poetry install + dev зависимости
+make install     
 ```
 
 При необходимости активируйте окружение: `poetry shell`.
