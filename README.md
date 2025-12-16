@@ -31,15 +31,6 @@ Makefile
 pyproject.toml
 ```
 
----
-
-## Требования
-- Python 3.10+
-- Poetry 1.6+
-- (опционально) установленный `make`
-
----
-
 ## Установка
 ```bash
 git clone <repo-url>
